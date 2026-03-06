@@ -1,0 +1,84 @@
+{
+  "context": {
+    "project": "frontend application",
+    "theme": "Theme đã tồn tại trong folder src/styles và phải được sử dụng cho UI"
+  },
+  "task": "Xây dựng giao diện Video Player phát YouTube có hỗ trợ upload và hiển thị subtitle từ file .srt",
+  "requirements": {
+    "youtube_player": {
+      "description": "Tạo component Player để phát video YouTube",
+      "notes": [
+        "Player phải hỗ trợ overlay subtitle từ file .srt do người dùng upload",
+        "Có thể dùng thư viện như react-player hoặc YouTube iframe API"
+      ]
+    },
+    "subtitle_upload": {
+      "description": "Thêm nút Upload Subtitle (.srt)",
+      "rules": [
+        "Chỉ chấp nhận file .srt",
+        "Sau khi upload thành công phải parse nội dung file",
+        "Lưu subtitle vào state"
+      ],
+      "success_message": "Subtitle uploaded successfully"
+    },
+    "subtitle_display": {
+      "description": "Hiển thị subtitle trong khi video đang phát",
+      "logic": [
+        "Đồng bộ timestamp của video với subtitle",
+        "Hiển thị subtitle dạng overlay trên video",
+        "Khi timestamp khớp với đoạn subtitle thì hiển thị subtitle tương ứng"
+      ]
+    },
+    "subtitle_style_config": {
+      "file": "src/config/subtitleConfig.ts",
+      "default_config": {
+        "bottomOffset": "16px",
+        "fontSize": "12px",
+        "background": "rgba(0,0,0,0.6)",
+        "padding": "6px 8px"
+      }
+    },
+    "subtitle_style_rules": [
+      "Subtitle hiển thị overlay trên video",
+      "Căn giữa theo chiều ngang",
+      "Cách đáy video theo bottomOffset",
+      "Sử dụng cấu hình từ subtitleConfig"
+    ],
+    "ui_constraints": {
+      "no_external_component_library": true,
+      "no_external_icon_library": true,
+      "details": [
+        "Không sử dụng thư viện UI component bên ngoài như Material UI, Ant Design, Chakra UI hoặc tương tự",
+        "Không sử dụng thư viện icon bên ngoài như Lucide React, Heroicons, Font Awesome hoặc tương tự",
+        "Toàn bộ component UI phải tự code",
+        "Toàn bộ icon phải dùng thẻ SVG tự viết"
+      ]
+    },
+    "responsive": {
+      "required": true,
+      "details": [
+        "Giao diện phải responsive trên mobile, tablet và desktop",
+        "Player, khu vực upload subtitle và phần hiển thị message phải co giãn hợp lý theo kích thước màn hình",
+        "Subtitle overlay phải đảm bảo dễ đọc trên nhiều viewport khác nhau"
+      ]
+    }
+  },
+  "suggested_structure": [
+    "src/components/Player/YouTubePlayer.tsx",
+    "src/components/Player/SubtitleOverlay.tsx",
+    "src/components/Player/SubtitleUploader.tsx",
+    "src/components/common/Icon.tsx",
+    "src/utils/parseSRT.ts",
+    "src/config/subtitleConfig.ts"
+  ],
+  "edge_cases": ["Chưa upload subtitle", "File subtitle sai format"],
+  "code_requirements": [
+    "Code rõ ràng",
+    "Tách component hợp lý",
+    "UI phải sử dụng theme từ src/styles",
+    "Không dùng thư viện component bên ngoài",
+    "Không dùng thư viện icon bên ngoài",
+    "Mọi icon phải dùng SVG tự code",
+    "Phải hỗ trợ responsive"
+  ]
+}
