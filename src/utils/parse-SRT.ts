@@ -1,9 +1,4 @@
-export type Subtitle = {
-  id: number
-  start: number // in seconds
-  end: number // in seconds
-  text: string
-}
+import type { Subtitle } from '../types/global'
 
 function timeToSeconds(timeStr: string): number {
   const [hours, minutes, seconds] = timeStr.split(':')

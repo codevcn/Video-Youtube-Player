@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import type { Subtitle } from '../utils/parse-SRT'
 import { YouTubePlayer } from '../components/player/YouTubePlayer'
 import { SubtitleUploader } from '../components/player/SubtitleUploader'
 import { storage } from '../utils/local-storage'
@@ -7,14 +6,9 @@ import { storage } from '../utils/local-storage'
 const DEFAULT_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 export function HomePage() {
-  const [subtitles, setSubtitles] = useState<Subtitle[]>([])
   const [youtubeUrl, setYoutubeUrl] = useState<string>(() =>
     storage.getOrDefault('youtube-player:last-url', DEFAULT_URL)
   )
-
-  const handleUploadSuccess = (uploadedSubtitles: Subtitle[]) => {
-    setSubtitles(uploadedSubtitles)
-  }
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value
@@ -42,13 +36,13 @@ export function HomePage() {
       </section>
 
       {/* Player Section */}
-      <section className="w-full max-w-4xl mx-auto">
-        <YouTubePlayer url={youtubeUrl} subtitles={subtitles} />
+      <section className="w-full mx-auto">
+        <YouTubePlayer url={youtubeUrl} />
       </section>
 
       {/* Uploader Section */}
       <section>
-        <SubtitleUploader onUploadSuccess={handleUploadSuccess} />
+        <SubtitleUploader />
       </section>
     </main>
   )

@@ -20,5 +20,5 @@
   --secondary-cl: #1f1f1f;
 
   /* Breaking points */
-  --breakpoint-mobile: 768px;
+  --breakpoint-mobile: 900px;
 }

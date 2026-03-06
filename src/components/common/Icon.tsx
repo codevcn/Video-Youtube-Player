@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type IconName = 'upload' | 'play' | 'info' | 'check' | 'close' | 'fullscreen' | 'fullscreen-exit';
+export type IconName = 'upload' | 'play' | 'info' | 'check' | 'close' | 'fullscreen' | 'fullscreen-exit' | 'arrow-up' | 'arrow-down' | 'chevron-right' | 'chevron-left' | 'bg-opacity';
 
 type IconProps = React.SVGProps<SVGSVGElement> & {
   name: IconName;
@@ -73,6 +73,39 @@ export function Icon({ name, size = 24, className, ...props }: IconProps) {
           <polyline points="20 10 14 10 14 4" />
           <line x1="10" y1="14" x2="3" y2="21" />
           <line x1="21" y1="3" x2="14" y2="10" />
+        </svg>
+      );
+    case 'arrow-up':
+      return (
+        <svg {...commonProps}>
+          <line x1="12" y1="19" x2="12" y2="5" />
+          <polyline points="5 12 12 5 19 12" />
+        </svg>
+      );
+    case 'arrow-down':
+      return (
+        <svg {...commonProps}>
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <polyline points="19 12 12 19 5 12" />
+        </svg>
+      );
+    case 'chevron-right':
+      return (
+        <svg {...commonProps}>
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      );
+    case 'chevron-left':
+      return (
+        <svg {...commonProps}>
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      );
+    case 'bg-opacity':
+      return (
+        <svg {...commonProps}>
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" />
+          <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor" stroke="none" />
         </svg>
       );
     default:

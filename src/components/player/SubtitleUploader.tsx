@@ -1,20 +1,43 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Icon } from '../common/Icon'
-import { type Subtitle, parseSRT } from '../../utils/parse-SRT'
+import { parseSRT } from '../../utils/parse-SRT'
+import { useSubtitleStore } from '../../store/subtitle-store'
+import { LoadingDots } from '../common/Loading'
 
-type SubtitleUploaderProps = {
-  onUploadSuccess: (subtitles: Subtitle[]) => void
-}
-
-export function SubtitleUploader({ onUploadSuccess }: SubtitleUploaderProps) {
+export function SubtitleUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const setSubtitles = useSubtitleStore(state => state.setSubtitles)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<boolean>(false)
+  const [uploading, setUploading] = useState<boolean>(false)
+  const isPickingFileRef = useRef(false)
+
+  useEffect(() => {
+    const handleFocus = () => {
+      if (isPickingFileRef.current) {
+        const hasFile = fileInputRef.current?.files?.length
+
+        if (!hasFile) {
+          // user cancel file picker
+          setUploading(false)
+        }
+
+        isPickingFileRef.current = false
+      }
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+    }
+  }, [])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     setError(null)
     setSuccess(false)
+    setUploading(false)
 
     if (!file) {
       return
@@ -35,7 +58,7 @@ export function SubtitleUploader({ onUploadSuccess }: SubtitleUploaderProps) {
             setError('File subtitle sai format hoặc không có nội dung hợp lệ.')
             return
           }
-          onUploadSuccess(subtitles)
+          setSubtitles(subtitles)
           setSuccess(true)
         } catch {
           setError('File subtitle sai format')
@@ -46,9 +69,13 @@ export function SubtitleUploader({ onUploadSuccess }: SubtitleUploaderProps) {
       setError('Có lỗi xảy ra khi đọc file')
     }
     reader.readAsText(file)
+
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   const handleUploadClick = () => {
+    setUploading(true)
+    isPickingFileRef.current = true
     fileInputRef.current?.click()
   }
 
@@ -61,10 +88,16 @@ export function SubtitleUploader({ onUploadSuccess }: SubtitleUploaderProps) {
         </div>
         <button
           onClick={handleUploadClick}
-          className="flex items-center gap-2 px-4 py-2 bg-(--main-cl) hover:bg-(--main-cl-hover) text-white rounded-lg font-medium transition-colors shadow-sm w-full sm:w-auto justify-center"
+          className="flex items-center gap-2 px-4 py-2 bg-(--main-cl) hover:bg-(--main-cl-hover) text-black rounded-lg font-medium transition-colors shadow-sm w-full sm:w-auto justify-center"
         >
-          <Icon name="upload" size={18} />
-          <span>Upload .srt</span>
+          {uploading ? (
+            <LoadingDots />
+          ) : (
+            <>
+              <Icon name="upload" size={18} />
+              <span>Upload .srt</span>
+            </>
+          )}
         </button>
         <input
           type="file"
@@ -84,8 +117,8 @@ export function SubtitleUploader({ onUploadSuccess }: SubtitleUploaderProps) {
       )}
 
       {success && (
-        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg flex items-start gap-2 text-sm border border-green-100 dark:border-green-900/30">
-          <Icon name="check" size={16} className="mt-0.5 shrink-0" />
+        <div className="font-bold mt-4 p-3 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg flex items-start gap-2 text-sm border border-green-100 dark:border-green-900/30">
+          <Icon name="check" size={18} className="mt-0.5 shrink-0" />
           <span>Subtitle uploaded successfully</span>
         </div>
       )}

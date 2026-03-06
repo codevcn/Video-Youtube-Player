@@ -1,14 +1,15 @@
-import type { Subtitle } from '../../utils/parse-SRT'
 import { Icon } from '../common/Icon'
 import { DesktopPlayer } from './DesktopPlayer'
 import { MobilePlayer } from './MobilePlayer'
+import { useSubtitleStore } from '../../store/subtitle-store'
 
 type YouTubePlayerProps = {
   url: string
-  subtitles: Subtitle[]
 }
 
-export function YouTubePlayer({ url, subtitles }: YouTubePlayerProps) {
+export function YouTubePlayer({ url }: YouTubePlayerProps) {
+  const subtitles = useSubtitleStore(state => state.subtitles)
+
   if (!url) {
     return (
       <div className="w-full aspect-video bg-zinc-900 rounded-xl flex items-center justify-center border border-zinc-800 shadow-lg overflow-hidden relative">
@@ -21,7 +22,7 @@ export function YouTubePlayer({ url, subtitles }: YouTubePlayerProps) {
   }
 
   return (
-    <div className="w-full mt-4">
+    <div className="flex justify-center w-full mt-4">
       <MobilePlayer url={url} subtitles={subtitles} />
       <DesktopPlayer url={url} subtitles={subtitles} />
     </div>

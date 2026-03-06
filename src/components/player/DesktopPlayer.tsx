@@ -2,8 +2,10 @@ import { useState, useRef, useEffect } from 'react'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { SubtitleOverlay } from './SubtitleOverlay'
-import type { Subtitle } from '../../utils/parse-SRT'
+import { SubtitleCustomPanel } from './SubtitleCustomPanel'
+import type { Subtitle } from '../../types/global'
 import { Icon } from '../common/Icon'
+import { useSubtitleStore } from '../../store/subtitle-store'
 
 type DesktopPlayerProps = {
   url: string
@@ -11,9 +13,10 @@ type DesktopPlayerProps = {
 }
 
 export function DesktopPlayer({ url, subtitles }: DesktopPlayerProps) {
-  const [currentTime, setCurrentTime] = useState(0)
+  const setCurrentTime = useSubtitleStore(s => s.setCurrentTime)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [showUploadSubWarn, setShowUploadSubWarn] = useState(true)
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -38,7 +41,7 @@ export function DesktopPlayer({ url, subtitles }: DesktopPlayerProps) {
   return (
     <div
       ref={containerRef}
-      className={`mobile:block hidden relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl group border border-zinc-800`}
+      className={`mobile:block hidden relative h-[calc(100vh-18px)] aspect-video bg-black rounded-xl overflow-hidden shadow-2xl group border border-zinc-800`}
     >
       <ReactPlayer
         src={url}
@@ -55,19 +58,27 @@ export function DesktopPlayer({ url, subtitles }: DesktopPlayerProps) {
       />
 
       {subtitles.length > 0 ? (
-        <SubtitleOverlay subtitles={subtitles} currentTime={currentTime} />
+        <SubtitleOverlay subtitles={subtitles} />
       ) : (
-        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-md text-xs text-white/80 border border-white/10 opacity-0 group-hover:opacity-100 tracking-wide transition-opacity duration-300 pointer-events-none">
-          Chưa upload subtitle
-        </div>
+        showUploadSubWarn && (
+          <div
+            onClick={() => setShowUploadSubWarn(false)}
+            className="flex items-center gap-1 cursor-pointer hover:bg-red-600/80 absolute top-3 right-3 bg-red-600/50 backdrop-blur-md px-2 py-1 rounded-md text-md text-white/80 border border-white/10"
+          >
+            <Icon name={'close'} size={22} />
+            <span>Chưa tải lên phụ đề</span>
+          </div>
+        )
       )}
+
+      <SubtitleCustomPanel />
 
       <button
         onClick={handleFullscreenToggle}
         title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-        className="absolute bottom-1 right-2 z-20 cursor-pointer bg-black/60 hover:bg-black/80 backdrop-blur-md text-white rounded-md p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10"
+        className="hidden group-hover:block absolute bottom-1 right-3 z-20 cursor-pointer bg-(--main-cl) hover:bg-(--main-cl-hover) backdrop-blur-md text-black rounded-md p-1.5 transition-opacity duration-200 border border-white/30"
       >
-        <Icon name={isFullscreen ? 'fullscreen-exit' : 'fullscreen'} size={18} />
+        <Icon name={isFullscreen ? 'fullscreen-exit' : 'fullscreen'} size={19} />
       </button>
     </div>
   )
