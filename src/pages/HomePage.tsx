@@ -19,9 +19,12 @@ export function HomePage() {
   return (
     <main>
       {/* Input URL Section */}
-      <section className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 flex flex-col sm:flex-row gap-4">
+      <section className="bg-white dark:bg-zinc-800 shadow-sm p-6 flex flex-col sm:flex-row gap-4">
         <div className="flex-1 w-full">
-          <label htmlFor="youtube-url" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+          <label
+            htmlFor="youtube-url"
+            className="block text-center text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1"
+          >
             YouTube Video URL
           </label>
           <input
@@ -30,7 +33,7 @@ export function HomePage() {
             value={youtubeUrl}
             onChange={handleUrlChange}
             placeholder="Nhập đường dẫn YouTube tại đây (vd: https://youtube.com/watch?v=...)"
-            className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-(--vcn-main-cl) focus:border-transparent transition-all"
+            className="text-center w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-(--vcn-main-cl) focus:border-transparent transition-all"
           />
         </div>
       </section>
